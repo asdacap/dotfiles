@@ -1,3 +1,6 @@
 *~
 *.elc
 .emacs.d/session*
+.emacs.d/.lsp-session-v1
+.emacs.d/projectile-bookmarks.eld
+
