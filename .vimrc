@@ -1,4 +1,4 @@
-"""""""""""""""""""""
+""""""""""""""""""""
 """" COMPETE STUFF
 
 map <S-F2> :!g++ -std=c++11 % -o %:r.out<CR>
@@ -50,6 +50,9 @@ Plugin 'mattn/emmet-vim'
 "Plugin 'nathanaelkane/vim-indent-guides'
 "Plugin 'valloric/youcompleteme'
 Plugin 'eagletmt/neco-ghc'
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'fatih/vim-go'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -87,13 +90,21 @@ let g:ycm_semantic_triggers = {'haskell' : ['.']}
 "                               START Custom                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set relativenumber
+set scrolloff=5
+set wildmenu
+set wildmode=longest:list,full
+
+if executable('gopls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'gopls',
+        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+        \ 'whitelist': ['go'],
+        \ })
+    autocmd BufWritePre *.go LspDocumentFormatSync
+endif
 
 " Solarized theme
 syntax enable
 set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
-
-set scrolloff=5
-
-set wildmenu
