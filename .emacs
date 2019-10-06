@@ -1,4 +1,4 @@
-;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (package-initialize)
 (add-to-list 'load-path "~/.emacs.d/load")
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
@@ -16,12 +16,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (tsdh-dark)))
+ '(display-line-numbers-type (quote relative))
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
     (lsp-java doom-modeline auctex latex-preview-pane ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
+ '(scroll-bar-mode nil)
+ '(show-paren-mode t)
+ '(size-indication-mode t)
+ '(tool-bar-mode nil)
  '(visible-bell t))
 
 (custom-set-faces
@@ -33,6 +39,7 @@
 
 (byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 (ido-mode 1)
+(global-display-line-numbers-mode 1)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -45,30 +52,37 @@
 (define-key global-map "\M-[" 'winner-undo)
 (define-key global-map "\M-]" 'winner-redo)
 
-;; Search and swiper
-(define-key global-map "\C-s" 'swiper)
-(define-key global-map (kbd "\C-S") 'swiper-all)
+(setq use-package-always-ensure t)
 
 (use-package ivy
-  :ensure t
   :config
   (ivy-mode 1)
   (setq ivy-re-builders-alist
       '((swiper . regexp-quote)
-        (t      . ivy--regex-fuzzy))))
+        (t      . ivy--regex-fuzzy)))
+  :bind
+  (("\C-s" . swiper)
+   ("S-C-s" . swiper-all)))
+
+(use-package which-key
+  :hook
+  (after-init . which-key-mode))
 
 (use-package counsel
-  :ensure t
+  :after (ivy)
   :config
-  (counsel-mode 1))
+  (counsel-mode 1)
+  :bind
+  (("\M-i" . counsel-imenu)
+   ("M-s c" . counsel-rg)
+   ("M-o f" . counsel-fzf)
+   ("M-o r" . counsel-recentf)))
 
 (use-package flycheck
-  :ensure t
   :hook
-  (add-init . #'global-flycheck-mode))
+  (after-init . global-flycheck-mode))
 
 (use-package projectile
-  :ensure t
   :bind
   (:map projectile-mode-map
 	 ("s-p" . projectile-command-map)
@@ -78,29 +92,24 @@
   :demand)
 
 (use-package company
-  :ensure t
   :config
   :hook
   (after-init . global-company-mode))
 
 (use-package company-flx
-  :ensure t
   :after (company)
   :config
   (company-flx-mode +1))
 
 (use-package ghc
-  :ensure t
   :hook haskell
   :commands (ghc-init ghc-init))
 
 (use-package company-ghc
-  :ensure t
   :after (company ghc)
   (add-to-list 'company-backends 'company-ghc))
 
 (use-package evil
-  :ensure t
   :init
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
@@ -120,47 +129,38 @@
 ;;(evil-default-state (quote emacs))
 ;;(evil-set-initial-state 'prog-mode 'normal)
 
-(use-package magit
-  :ensure t)
+(use-package magit)
 
 (use-package evil-magit
-  :ensure t
   :after (evil magit))
 
 (use-package evil-collection
   :after evil
-  :ensure t
   :config
   (evil-collection-init))
 
 (use-package evil-surround
   :after evil
-  :ensure t
   :config
   (global-evil-surround-mode 1))
 
 (use-package lsp-mode
   :hook go-mode
-  :ensure t
   :config
   (setq lsp-prefer-flymake :none))
 
 (use-package lsp-ui
   :after lsp-mode
-  :ensure t
   :hook lsp-mode)
 
 (use-package lsp-java
-  :after lsp-mode
-  :ensure t)
+  :after lsp-mode)
 
-(use-package company-lsp
-  :ensure t
-  :after (company, lsp-mode)
-  :config ((push 'company-lsp company-backends)))
+;;(use-package company-lsp
+;;  :after (company lsp-mode)
+;;  :config ((push 'company-lsp company-backends)))
 
 (use-package dap-mode
-  :ensure t
   :after lsp-mode
   :config
   (require 'dap-go)
@@ -216,13 +216,11 @@
 				     :buildFlags nil
 				     :args nil
 				     :env nil
-				     :envFile nil))
-  )
+				     :envFile nil)))
 
 (use-package yasnippet)
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
 	 ("\\.md\\'" . markdown-mode)
@@ -233,11 +231,4 @@
   :ensure auctex)
 
 (use-package doom-modeline
-  :ensure t
   :hook (after-init . doom-modeline-mode))
-
-(use-package linum-relative
-  :ensure t
-  :config
-  (setq linum-relative-backend 'display-line-numbers-mode)
-  (linum-relative-on))
