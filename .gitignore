@@ -3,4 +3,7 @@
 .emacs.d/session*
 .emacs.d/.lsp-session-v1
 .emacs.d/projectile-bookmarks.eld
+.emacs.d/.extension
+.emacs.d/elpa
+.emacs.d/ido.last
 

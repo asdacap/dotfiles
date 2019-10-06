@@ -1,4 +1,4 @@
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (package-initialize)
 (add-to-list 'load-path "~/.emacs.d/load")
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
@@ -16,14 +16,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(dap-inhibit-io nil)
- '(dap-print-io t)
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
+    (lsp-java doom-modeline auctex latex-preview-pane ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
  '(visible-bell t))
 
 (custom-set-faces
@@ -33,9 +31,26 @@
  ;; If there is more than one, they won't work right.
  )
 
+(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 (ido-mode 1)
 
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; The buffer list always open switch buffer instead
+(define-key global-map "\C-x\C-b" 'ivy-switch-buffer)
+
+;; Winner undo
+(when (fboundp 'winner-mode)
+      (winner-mode 1))
+(define-key global-map "\M-[" 'winner-undo)
+(define-key global-map "\M-]" 'winner-redo)
+
+;; Search and swiper
+(define-key global-map "\C-s" 'swiper)
+(define-key global-map (kbd "\C-S") 'swiper-all)
+
 (use-package ivy
+  :ensure t
   :config
   (ivy-mode 1)
   (setq ivy-re-builders-alist
@@ -43,14 +58,17 @@
         (t      . ivy--regex-fuzzy))))
 
 (use-package counsel
+  :ensure t
   :config
   (counsel-mode 1))
 
 (use-package flycheck
+  :ensure t
   :hook
   (add-init . #'global-flycheck-mode))
 
 (use-package projectile
+  :ensure t
   :bind
   (:map projectile-mode-map
 	 ("s-p" . projectile-command-map)
@@ -60,18 +78,26 @@
   :demand)
 
 (use-package company
+  :ensure t
   :config
-  (add-to-list 'company-backends 'company-ghc)
   :hook
-  (after-init . 'global-company-mode))
+  (after-init . global-company-mode))
 
 (use-package company-flx
+  :ensure t
   :after (company)
   :config
   (company-flx-mode +1))
+
 (use-package ghc
+  :ensure t
   :hook haskell
   :commands (ghc-init ghc-init))
+
+(use-package company-ghc
+  :ensure t
+  :after (company ghc)
+  (add-to-list 'company-backends 'company-ghc))
 
 (use-package evil
   :ensure t
@@ -84,13 +110,22 @@
 	("\M-." . nil)
 	("\C-n" . nil)
 	("\C-p" . nil))
+  (:map evil-motion-state-map
+	("\C-f" . 'evil-scroll-up)
+	("\C-b" . 'evil-scroll-down)
+	("\C-d" . nil)
+	("\C-u" . nil))
   :config
   (evil-mode 1))
 ;;(evil-default-state (quote emacs))
 ;;(evil-set-initial-state 'prog-mode 'normal)
 
+(use-package magit
+  :ensure t)
+
 (use-package evil-magit
-  :after evil)
+  :ensure t
+  :after (evil magit))
 
 (use-package evil-collection
   :after evil
@@ -106,36 +141,39 @@
 
 (use-package lsp-mode
   :hook go-mode
+  :ensure t
   :config
   (setq lsp-prefer-flymake :none))
 
 (use-package lsp-ui
   :after lsp-mode
+  :ensure t
   :hook lsp-mode)
 
-(use-package company
-  :hook ((after-init . global-company-mode)))
+(use-package lsp-java
+  :after lsp-mode
+  :ensure t)
 
 (use-package company-lsp
+  :ensure t
   :after (company, lsp-mode)
   :config ((push 'company-lsp company-backends)))
 
 (use-package dap-mode
+  :ensure t
   :after lsp-mode
   :config
-  (dap-mode 1)
+  (require 'dap-go)
   (dap-ui-mode 1)
   ;; enables mouse hover support
   (dap-tooltip-mode 1)
   ;; use tooltips for mouse hover
   ;; if it is not enabled `dap-mode' will use the minibuffer.
   (tooltip-mode 1)
-  )
 
+  (setq dap-inhibit-io nil)
+  (setq dap-print-io t)
 
-(use-package dap-go
-  :after dap-mode
-  :config
   (defun dap-go--populate-default-args (conf)
     "Populate CONF with the default arguments."
     (setq conf (pcase (plist-get conf :mode)
@@ -183,13 +221,23 @@
 
 (use-package yasnippet)
 
-(fset 'yes-or-no-p 'y-or-n-p)
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+	 ("\\.md\\'" . markdown-mode)
+	 ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
-;; The buffer list always open switch buffer instead
-(define-key global-map "\C-x\C-b" 'ivy-switch-buffer)
+(use-package tex
+  :ensure auctex)
 
-;; Winner undo
-(when (fboundp 'winner-mode)
-      (winner-mode 1))
-(define-key global-map "\M-[" 'winner-undo)
-(define-key global-map "\M-]" 'winner-redo)
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
+
+(use-package linum-relative
+  :ensure t
+  :config
+  (setq linum-relative-backend 'display-line-numbers-mode)
+  (linum-relative-on))
