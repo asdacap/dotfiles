@@ -23,7 +23,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (lsp-java doom-modeline auctex latex-preview-pane ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
+    (editorconfig yaml-mode lsp-java doom-modeline auctex latex-preview-pane ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
@@ -45,6 +45,7 @@
 
 ;; The buffer list always open switch buffer instead
 (define-key global-map "\C-x\C-b" 'ivy-switch-buffer)
+(define-key global-map "\C-xf" 'counsel-find-file)
 
 ;; Winner undo
 (when (fboundp 'winner-mode)
@@ -55,6 +56,7 @@
 (setq use-package-always-ensure t)
 
 (use-package ivy
+  :demand
   :config
   (ivy-mode 1)
   (setq ivy-re-builders-alist
@@ -69,14 +71,14 @@
   (after-init . which-key-mode))
 
 (use-package counsel
-  :after (ivy)
+  :demand
   :config
   (counsel-mode 1)
   :bind
   (("\M-i" . counsel-imenu)
    ("M-s c" . counsel-rg)
    ("M-o f" . counsel-fzf)
-   ("M-o r" . counsel-recentf)))
+   ("M-o r" . counel-recentf)))
 
 (use-package flycheck
   :hook
@@ -229,6 +231,13 @@
 
 (use-package tex
   :ensure auctex)
+
+(use-package yaml-mode)
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
