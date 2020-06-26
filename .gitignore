@@ -9,3 +9,5 @@
 .emacs.d/transient
 .emacs.d/ido.last
 
+nvim/plugged/
+nvim/autoload/
