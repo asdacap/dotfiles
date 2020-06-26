@@ -21,14 +21,19 @@
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(inhibit-startup-screen t)
+ '(lsp-auto-execute-action nil)
+ '(lsp-log-io t)
  '(package-selected-packages
    (quote
-    (editorconfig yaml-mode lsp-java doom-modeline auctex latex-preview-pane ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
+    (lsp-ui editorconfig yaml-mode lsp-java doom-modeline auctex latex-preview-pane ivy-hydra hydra dap-mode evil-collection evil-surround gotest go-projectile ivy-yasnippet yasnippet company-lsp lsp-mode go-mode ghci-completion company-ghc company-flx flx company magit ivy evil)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil)
  '(visible-bell t))
+
+;; Put backup somewhere else
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup-dir/")))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -118,7 +123,10 @@
   (setq evil-want-C-u-scroll t)
   :bind
   (:map evil-normal-state-map
-	("\M-." . nil)
+	("\\M-." . nil)
+	("M-." . nil)
+	("\\C-." . nil)
+	("C-." . nil)
 	("\C-n" . nil)
 	("\C-p" . nil))
   (:map evil-motion-state-map
@@ -131,10 +139,6 @@
 ;;(evil-default-state (quote emacs))
 ;;(evil-set-initial-state 'prog-mode 'normal)
 
-(use-package magit)
-
-(use-package evil-magit
-  :after (evil magit))
 
 (use-package evil-collection
   :after evil
@@ -146,14 +150,41 @@
   :config
   (global-evil-surround-mode 1))
 
-(use-package lsp-mode
-  :hook go-mode
-  :config
-  (setq lsp-prefer-flymake :none))
+(use-package magit)
 
+;; (use-package evil-magit
+;;   :after (evil magit))
+
+
+;;(use-package lsp-ui
+;;  :hook lsp-mode)
+
+(use-package lsp-mode
+  :commands lsp
+  :hook ((lsp-after-open . lsp-enable-imenu))
+  :bind (:map lsp-mode-map
+              ("C-c C-t" . lsp-describe-thing-at-point))
+  :config
+  (setq lsp-prefer-flymake nil))
+
+;; company-lsp: Company completion backend for lsp-mode.
+;; https://github.com/tigersoldier/company-lsp/
+(use-package company-lsp
+  :config (push 'company-lsp company-backends))
+
+;; lsp-ui: This contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
+;; https://github.com/emacs-lsp/lsp-ui
 (use-package lsp-ui
-  :after lsp-mode
-  :hook lsp-mode)
+  :config
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+  (setq lsp-ui-sideline-enable nil
+        lsp-ui-doc-enable nil
+        lsp-ui-flycheck-enable t
+        lsp-ui-imenu-enable t
+        lsp-ui-sideline-ignore-duplicate t))
+
+(add-hook 'go-mode #'lsp)
 
 (use-package lsp-java
   :after lsp-mode)
