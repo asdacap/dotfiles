@@ -41,3 +41,7 @@ imap <C-n> <ESC>:action HippieCompletion<CR>a
 imap <C-p> <ESC>:action HippieBackwardCompletion<CR>a
 "inoremap <C-g> <Esc>
 
+" bindings follows emacs binding
+nmap <c-x><c-f> :action SearchEverywhere<CR>
+nmap <c-x>b :action Switcher<CR>
+nmap <m-x> :action SearchEverywhere<CR>
