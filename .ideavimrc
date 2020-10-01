@@ -45,3 +45,14 @@ imap <C-p> <ESC>:action HippieBackwardCompletion<CR>a
 nmap <c-x><c-f> :action SearchEverywhere<CR>
 nmap <c-x>b :action Switcher<CR>
 nmap <m-x> :action SearchEverywhere<CR>
+
+" unimpaired
+nnoremap [q :action GotoNextError<cr>
+nnoremap ]q :action GotoPreviousError<cr>
+nnoremap [m :action MethodUp<cr>
+nnoremap ]m :action MethodDown<cr>
+nnoremap [c :action VcsShowPrevChangeMarker<cr>
+nnoremap ]c :action VcsShowNextChangeMarker<cr>
+
+" for easy reload
+nmap <m-r> :source ~/.ideavimrc
