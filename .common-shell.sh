@@ -1,5 +1,5 @@
 
-alias edt=$EDITOR
+alias e=$EDITOR
 alias edtzsh="edt ~/.zshrc && source ~/.zshrc"
 alias edtcommon="edt ~/.common-shell.sh && source ~/.zshrc"
 alias edttmux="edt ~/.tmux.conf"
