@@ -1,0 +1,44 @@
+# displaycount="$(yabai -m query --displays | jq '. | length')" && \
+# nextdisplay="$(yabai -m query --spaces | jq '(map(select(."visible" == 1))[0].display-1)%$displaycount+1" && \
+# nextdisplayscreen="$(yabai -m query --spaces --display $nextdisplay | jq 'map(select(."visible" == 1))[0].index')" && \
+#
+#windowcount="$(yabai -m query --windows | jq '. | map(select(.visible == 1)) | length')" && \
+#currentwindow="$(yabai -m query --windows | jq '. | map(select(.visible == 1)) | map(.focused == 1) | index(true)')" && \
+#nextidx="$(( (currentwindow+1)%windowcount ))" && \
+#id="$(yabai -m query --windows | jq ". | map(select(.visible == 1)) | .["$nextidx"].id")" && \
+
+cmd - up : displaycount="$(yabai -m query --displays | jq '. | length')" && \
+               currentdisplay="$(yabai -m query --spaces | jq '(map(select(."focused" == 1))[0].display)')" && \
+               nextdisplay=$(( (currentdisplay%displaycount)+1 )) && \
+               yabai -m window --display $nextdisplay 
+
+cmd - down : displaycount="$(yabai -m query --displays | jq '. | length')" && \
+               currentdisplay="$(yabai -m query --spaces | jq '(map(select(."focused" == 1))[0].display)')" && \
+               nextdisplay=$(( (currentdisplay%displaycount)+1 )) && \
+               yabai -m display --focus $nextdisplay 
+                   
+cmd - left : windowcount="$(yabai -m query --windows | jq '. | sort_by(.id) | map(select(.visible == 1)) | length')" && \
+             currentwindow="$(yabai -m query --windows | jq '. | sort_by(.id) | map(select(.visible == 1)) | map(.focused == 1) | index(true)')" && \
+             nextidx="$(( (currentwindow+1)%windowcount ))" && \
+             id="$(yabai -m query --windows | jq ". | sort_by(.id)| map(select(.visible == 1)) | .["$nextidx"].id")" && \
+             yabai -m window --focus $id
+
+cmd + alt - left : windowcount="$(yabai -m query --windows | jq '. | sort_by(.id) |  length')" && \
+             currentwindow="$(yabai -m query --windows | jq '. | sort_by(.id) |  map(.focused == 1) | index(true)')" && \
+             nextidx="$(( (currentwindow+1)%windowcount ))" && \
+             id="$(yabai -m query --windows | jq ". | sort_by(.id)|  .["$nextidx"].id")" && \
+             yabai -m window --focus $id
+
+cmd - right : windowcount="$(yabai -m query --windows | jq '. | sort_by(.id) | map(select(.visible == 1)) | length')" && \
+             currentwindow="$(yabai -m query --windows | jq '. | sort_by(.id) | map(select(.visible == 1)) | map(.focused == 1) | index(true)')" && \
+             nextidx="$(( (currentwindow+windowcount-1)%windowcount ))" && \
+             id="$(yabai -m query --windows | jq ". | sort_by(.id)| map(select(.visible == 1)) | .["$nextidx"].id")" && \
+             yabai -m window --focus $id
+
+cmd + alt - right : windowcount="$(yabai -m query --windows | jq '. | sort_by(.id) |  length')" && \
+             currentwindow="$(yabai -m query --windows | jq '. | sort_by(.id) |  map(.focused == 1) | index(true)')" && \
+             nextidx="$(( (currentwindow+windowcount-1)%windowcount ))" && \
+             id="$(yabai -m query --windows | jq ". | sort_by(.id)|  .["$nextidx"].id")" && \
+             yabai -m window --focus $id
+
+cmd - g : yabai -m window --focus recent
