@@ -41,4 +41,4 @@ cmd + alt - right : windowcount="$(yabai -m query --windows | jq '. | sort_by(.i
              id="$(yabai -m query --windows | jq ". | sort_by(.id)|  .["$nextidx"].id")" && \
              yabai -m window --focus $id
 
-cmd - g : yabai -m window --focus recent
+cmd - t : yabai -m window --focus recent
