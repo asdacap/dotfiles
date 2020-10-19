@@ -1,5 +1,6 @@
 
 alias e=$EDITOR
+alias edt=$EDITOR
 alias edtzsh="edt ~/.zshrc && source ~/.zshrc"
 alias edtcommon="edt ~/.common-shell.sh && source ~/.zshrc"
 alias edttmux="edt ~/.tmux.conf"
@@ -16,3 +17,5 @@ alias ffzf="find -f . | fzf"
 function rgfzf() {
     rg -i $1 . | fzf ${@:2}
 }
+
+set -o emacs
