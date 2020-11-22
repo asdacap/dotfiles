@@ -11,6 +11,7 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')   
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'morhetz/gruvbox'
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -42,6 +43,9 @@ set wildmenu
 set wildmode=longest:list,full
 set termguicolors
 let g:asyncrun_open = 6
+set hidden " no more warning on switching unsaved buffer
+set guicursor=a:blinkon10
+command W w " I keep using the large w
 
 " set easymotion
 " set textobj-entire
