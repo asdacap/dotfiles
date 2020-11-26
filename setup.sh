@@ -7,6 +7,7 @@ set -e
 [ ! -f "$HOME/.yabairc" ] && ln -s "$PWD/.yabairc" "$HOME/.yabairc"
 [ ! -f "$HOME/.skhdrc" ] && ln -s "$PWD/.skhdrc" "$HOME/.skhdrc"
 [ ! -f "$HOME/.tmux.conf" ] && ln -s "$PWD/.tmux.conf" "$HOME/.tmux.conf"
+[ ! -f "$HOME/.emacs" ] && ln -s "$PWD/.emacs" "$HOME/.emacs"
 
 # Making sure stuff gets loaded
 LINE="source $HOME/.common-shell.sh"
