@@ -8,9 +8,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(tango-dark))
+ '(custom-enabled-themes (quote (tango-dark)))
+ '(js-indent-level 2)
  '(package-selected-packages
-   '(evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil)))
+   (quote
+    (exec-path-from-shell counsel evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil)))
+ '(vc-follow-symlinks t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -19,11 +22,22 @@
  ;; If there is more than one, they won't work right.
  )
 
-(ivy-mode 1)
-(counsel-mode 1)
+(use-package counsel
+  :ensure t
+  :config
+  (counsel-mode 1))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :hook eshell-mode
+  :config
+  (exec-path-from-shell-initialize))
 
 (use-package ivy
-  :bind ("C-x C-f" . counsel-file-jump))
+  :ensure t
+  :bind ("C-x C-f" . counsel-find-file)
+  :config
+  (ivy-mode 1))
 
 (use-package evil
   :ensure t
@@ -56,3 +70,7 @@
 (defun reload-config ()
   (interactive)
   (load-file "~/.emacs"))
+
+(add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
+
+(setenv "EDITOR" "find-file")
