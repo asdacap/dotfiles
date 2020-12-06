@@ -10,9 +10,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (tango-dark)))
  '(js-indent-level 2)
+ '(org-babel-load-languages (quote ((shell . t) (emacs-lisp . t))))
  '(package-selected-packages
    (quote
-    (lsp-java dap-mode javadoc-lookup which-key company-lsp lsp-mode exec-path-from-shell counsel evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil)))
+    (ob-async lsp-java dap-mode javadoc-lookup which-key company-lsp lsp-mode exec-path-from-shell counsel evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil)))
  '(vc-follow-symlinks t))
 
 (custom-set-faces
@@ -106,3 +107,7 @@
 (use-package which-key
     :config
     (which-key-mode))
+
+(use-package ob-async
+  :ensure t
+  :init)
