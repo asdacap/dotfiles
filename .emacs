@@ -11,6 +11,13 @@
  '(custom-enabled-themes (quote (tango-dark)))
  '(js-indent-level 2)
  '(org-babel-load-languages (quote ((shell . t) (emacs-lisp . t))))
+ '(org-file-apps
+   (quote
+    ((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . default)
+     (directory . emacs))))
  '(package-selected-packages
    (quote
     (ob-async lsp-java dap-mode javadoc-lookup which-key company-lsp lsp-mode exec-path-from-shell counsel evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil)))
