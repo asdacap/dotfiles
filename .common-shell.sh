@@ -19,3 +19,7 @@ function rgfzf() {
 }
 
 set -o emacs
+
+function bell() {
+    terminal-notifier -message "${1:-"Done"}" -title "Done"
+}

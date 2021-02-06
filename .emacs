@@ -20,7 +20,8 @@
      ("\\.pdf\\'" . default)
      (directory . emacs)))
  '(package-selected-packages
-   '(yaml-mode gcmh wisitoken-grammar-mode editorconfig auto-compile ob-async lsp-java dap-mode javadoc-lookup which-key company-lsp lsp-mode exec-path-from-shell counsel evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil))
+   '(plantuml-mode helm helm-git flx flycheck-xcode yaml-mode gcmh wisitoken-grammar-mode editorconfig auto-compile ob-async lsp-java dap-mode javadoc-lookup which-key company-lsp lsp-mode exec-path-from-shell counsel evil-magit magit ace-window vterm flycheck-rust flycheck rust-mode evil-collection ace-jump-mode avy markdown-mode evil-easymotion use-package ivy evil))
+ '(select-enable-clipboard nil)
  '(vc-follow-symlinks t))
 
 (custom-set-faces
@@ -110,9 +111,12 @@
 
 (use-package ivy
   :ensure t
-  :bind ("C-x C-f" . counsel-find-file)
+  :bind ("C-x C-f" . counsel-fzf)
   :config
-  (ivy-mode 1))
+  (ivy-mode 1)
+ (setq ivy-re-builders-alist
+      '((t . ivy--regex-fuzzy)))
+  )
 
 (use-package evil
   :ensure t
@@ -150,8 +154,6 @@
   (load-file "~/.emacs"))
 
 (add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
-
-(setenv "EDITOR" "find-file")
 
 (define-key prog-mode-map (kbd "C-c C-c") 'compile)
 (global-auto-revert-mode)
@@ -196,3 +198,16 @@
   (editorconfig-mode 1))
 
 (global-set-key "\M- " 'hippie-expand)
+
+(defun ivy-sort-files-function (_name candidates)
+  "Sort CANDIDATES files alphabetically ignoring trailing slashes.
+Meant for use in `ivy-sort-matches-functions-alist' so 
+directories will have a trailing /, ignore it so foo.txt is after foo/."
+  ;; Perhaps add a check for if directories should sort first
+  (cl-sort (copy-sequence candidates)
+           (lambda (x y)
+             (string< (if (string-suffix-p "/" x) (substring x 0 -1) x)
+                      (if (string-suffix-p "/" y) (substring y 0 -1) y)))))
+
+(setenv "EDITOR" "find-file")
+(substitute-key-definition 'kill-buffer 'kill-buffer-and-its-windows global-map)

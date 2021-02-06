@@ -111,3 +111,7 @@ map <S-F4> :!java -classpath %:p:h Main < %:p:h/input<CR>
 map <F5> :!stack runghc % < %:p:h/input <CR>
 map <S-F5> :!stack ghc % -o %:r.out <CR>
 
+"""" HTTP stuff
+
+nmap <leader>e :w !zsh<CR>
+map <leader>e :.w !zsh<CR>

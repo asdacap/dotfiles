@@ -1,7 +1,8 @@
 [']>[Q]
 [,]>[W]
 [.]>[F]
-[/]>[']
+[\]>[']
+[/]>[\]
 [;]>[Z]
 [=]>[`]
 [B]>[M]
@@ -40,6 +41,7 @@
 [kp-F]>[down]
 [kp-O]>[delete]
 [kp-P]>[tab]
+{kp-.}>{-lshift}{tab}{+lshift}
 [kp-bspace]>[kpshift]
 [kp-delete]>[lalt]
 [kp-down]>[enter]
