@@ -5,7 +5,7 @@
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; I you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(tango-dark))
@@ -112,6 +112,7 @@
 (use-package ivy
   :ensure t
   :bind ("C-x C-f" . counsel-fzf)
+  :bind ("C-x f" . counsel-find-file)
   :config
   (ivy-mode 1)
  (setq ivy-re-builders-alist
