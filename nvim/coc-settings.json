@@ -1,0 +1,13 @@
+{
+    "coc.preferences.useQuickfixForLocations": true,
+    "codeLens.enable": true,
+    "languageserver": {
+        "haskell": {
+            "command": "haskell-language-server-wrapper",
+            "args": ["--lsp"],
+            "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
+            "requireRootPattern": false,
+            "filetypes": ["haskell", "lhaskell"]
+        }
+    }
+}

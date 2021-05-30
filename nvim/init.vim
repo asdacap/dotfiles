@@ -19,6 +19,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 
 """" Actual custom
@@ -38,7 +40,7 @@ set si
 
 " quality of life
 set scrolloff=5
-set number
+set relativenumber
 set wildmenu
 set wildmode=longest:list,full
 set termguicolors
@@ -78,7 +80,20 @@ map sw <Plug>(easymotion-bd-w)
 nmap <c-x><c-f> :Files<CR>
 nmap <c-x>b :Buffers<CR>
 
+" Some emacs stuff that I got used to
+nmap <c-a> I
+nmap <c-e> A
+imap <c-a> <c-o>$
+imap <c-e> <c-o>^
+imap <m-b> <c-o>b
+imap <m-f> <c-o>w
+imap <m-d> <c-o>dw
+nmap <c-k> d$
+imap <c-k> <c-o>d$
+
 """" COC
+
+let b:coc_suggest_disable = 1 " it mess with C-n/C-p
 nmap <leader>r :CocList tasks<CR>
 
 " Use `[g` and `]g` to navigate diagnostics
@@ -91,6 +106,8 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+inoremap <silent><expr> <c-space> coc#refresh()
 
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
@@ -115,3 +132,15 @@ map <S-F5> :!stack ghc % -o %:r.out <CR>
 
 nmap <leader>e :w !zsh<CR>
 map <leader>e :.w !zsh<CR>
+
+""" Syntastic
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+

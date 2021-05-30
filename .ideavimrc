@@ -52,6 +52,18 @@ nnoremap ]c :action VcsShowNextChangeMarker<cr>
 " for easy reload
 nmap <m-r> :source ~/.ideavimrc
 
+" Some emacs stuff that I got used to
+nmap <c-a> I
+nmap <c-e> A
+imap <c-a> <c-o>$
+imap <c-e> <c-o>^
+imap <m-b> <c-o>b
+imap <m-f> <c-o>w
+imap <m-d> <c-o>dw
+nmap <c-k> d$
+imap <c-k> <c-o>d$
+
+
 " bindings follows emacs binding
 nmap <c-x><c-f> :action GotoFile<CR>
 nmap <c-x>b :action Switcher<CR>
