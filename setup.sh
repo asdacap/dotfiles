@@ -2,6 +2,9 @@
 
 set -e
 
+# For yabai window shortcut
+mkdir -p ~/.config/shortcut_windows/
+
 # Some links
 [ ! -f "$HOME/.common-shell.sh" ] && ln -s "$PWD/.common-shell.sh" "$HOME/.common-shell.sh"
 [ ! -f "$HOME/.yabairc" ] && ln -s "$PWD/.yabairc" "$HOME/.yabairc"
