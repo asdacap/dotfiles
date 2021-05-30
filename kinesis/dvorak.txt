@@ -5,9 +5,9 @@
 [/]>[\]
 [;]>[Z]
 [=]>[`]
-[B]>[M]
+[B]>[K]
 [C]>[U]
-[D]>[K]
+[D]>[M]
 [E]>[S]
 [F]>[J]
 [G]>[L]
@@ -37,8 +37,8 @@
 [enter]>[rctrl]
 [hyphen]>[=]
 [intl-\]>[lwin]
-[kp-D]>[up]
 [kp-F]>[down]
+[kp-B]>[up]
 [kp-O]>[delete]
 [kp-P]>[tab]
 {kp-.}>{-lshift}{tab}{+lshift}
@@ -56,8 +56,8 @@
 [kp.]>[lwin]
 [kp0]>[lshift]
 [kp1]>[left]
-{kp2}>{-lshift}{cbrack}{+lshift}
-{kp-B}>{-lshift}{obrack}{+lshift}
+{kp2}>{-lshift}{obrack}{+lshift}
+{kp3}>{-lshift}{cbrack}{+lshift}
 [kp4]>[obrack]
 [kp5]>[cbrack]
 {kp6}>{-lshift}{'}{+lshift}
