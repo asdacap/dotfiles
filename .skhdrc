@@ -49,3 +49,15 @@ cmd + alt - right : windowcount="$(yabai -m query --windows | jq '. | sort_by(.i
 
 # Focus recent
 cmd - 4 : yabai -m window --focus recent
+
+# Shortcut keys
+cmd + alt - 1 : yabai -m window --focus $(cat ~/.config/shortcut_windows/w1.id)
+cmd + alt + shift - 1 : yabai -m query --windows --window | jq ".id" > ~/.config/shortcut_windows/w1.id
+cmd + alt - 2 : yabai -m window --focus $(cat ~/.config/shortcut_windows/w2.id)
+cmd + alt + shift - 2 : yabai -m query --windows --window | jq ".id" > ~/.config/shortcut_windows/w2.id
+cmd + alt - 3 : yabai -m window --focus $(cat ~/.config/shortcut_windows/w3.id)
+cmd + alt + shift - 3 : yabai -m query --windows --window | jq ".id" > ~/.config/shortcut_windows/w3.id
+cmd + alt - 4 : yabai -m window --focus $(cat ~/.config/shortcut_windows/w4.id)
+cmd + alt + shift - 4 : yabai -m query --windows --window | jq ".id" > ~/.config/shortcut_windows/w4.id
+cmd + alt - 5 : yabai -m window --focus $(cat ~/.config/shortcut_windows/w5.id)
+cmd + alt + shift - 5 : yabai -m query --windows --window | jq ".id" > ~/.config/shortcut_windows/w5.id
