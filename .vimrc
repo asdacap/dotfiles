@@ -1,4 +1,112 @@
-""""""""""""""""""""
+let mapleader = " "
+
+"""" Plug stuff
+
+" auto-install vim-plug                                                                                                                
+if empty(glob('~/.vim/autoload/plug.vim'))                                                                                    
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim                                                             
+  autocmd VimEnter * PlugInstall                                                                                                      
+endif                                                                                                                                 
+
+call plug#begin('~/.config/nvim/plugged')   
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'morhetz/gruvbox'
+Plug 'easymotion/vim-easymotion'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+call plug#end()
+
+"""" Actual custom
+syntax on
+
+" For fase search
+set incsearch
+set ignorecase
+set smartcase
+
+" Tab stuff
+set expandtab
+set smarttab
+set shiftwidth=4
+set ai
+set si
+
+" quality of life
+set scrolloff=5
+set number
+set wildmenu
+set wildmode=longest:list,full
+set termguicolors
+let g:asyncrun_open = 6
+set hidden " no more warning on switching unsaved buffer
+set guicursor=a:blinkon10
+command W w " I keep using the large w
+
+" set easymotion
+" set textobj-entire
+" set argtextobj
+
+if executable('gopls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'gopls',
+        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+        \ 'whitelist': ['go'],
+        \ })
+    autocmd BufWritePre *.go LspDocumentFormatSync
+endif
+
+" Color
+autocmd vimenter * colorscheme gruvbox
+
+" easymotion
+
+let g:EasyMotion_smartcase = 1
+map sh <Plug>(easymotion-bd-wl)
+map sl <Plug>(easymotion-bd-wl)
+map sj <Plug>(easymotion-j)
+map sk <Plug>(easymotion-k)
+map ss <Plug>(easymotion-s2)
+map sw <Plug>(easymotion-bd-w)
+
+" FZF
+" bindings follows emacs binding
+nmap <c-x><c-f> :Files<CR>
+nmap <c-x>b :Buffers<CR>
+
+" Some emacs stuff that I got used to
+nmap <c-a> I
+nmap <c-e> A
+imap <c-a> <c-o>$
+imap <c-e> <c-o>^
+imap <m-b> <c-o>b
+imap <m-f> <c-o>w
+imap <m-d> <c-o>dw
+nmap <c-k> d$
+imap <c-k> <c-o>d$
+
+"""" COC
+nmap <leader>r :CocList tasks<CR>
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
 """" COMPETE STUFF
 
 map <S-F2> :!g++ -std=c++11 % -o %:r.out<CR>
@@ -13,100 +121,18 @@ map <S-F4> :!java -classpath %:p:h Main < %:p:h/input<CR>
 map <F5> :!stack runghc % < %:p:h/input <CR>
 map <S-F5> :!stack ghc % -o %:r.out <CR>
 
-syntax on
-set expandtab
-set smarttab
-set shiftwidth=4
-set ai
-set si
 
+let g:haskellmode_completion_ghc = 0
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+let g:ycm_semantic_triggers = {'haskell' : ['.']}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                              START Vundle                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
-"Plugin 'scrooloose/nerdtree'
-"Plugin 'scrooloose/nerdcommenter'
-"Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'altercation/vim-colors-solarized'
-"Plugin 'airblade/vim-gitgutter'
-Plugin 'vim-airline/vim-airline'
-"Plugin 'vim-syntastic/syntastic'
-Plugin 'mattn/emmet-vim'
-"Plugin 'pangloss/vim-javascript'
-"Plugin 'nathanaelkane/vim-indent-guides'
-"Plugin 'valloric/youcompleteme'
-Plugin 'eagletmt/neco-ghc'
-Plugin 'prabirshrestha/async.vim'
-Plugin 'prabirshrestha/vim-lsp'
-Plugin 'fatih/vim-go'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                END Vundle                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Syntastic config
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" Youcomplet
-let g:ycm_semantic_triggers = {'haskell' : ['.']}
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               START Custom                             "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set relativenumber
-set scrolloff=5
-set wildmenu
-set wildmode=longest:list,full
-
-if executable('gopls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'gopls',
-        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-        \ 'whitelist': ['go'],
-        \ })
-    autocmd BufWritePre *.go LspDocumentFormatSync
-endif
-
-" Solarized theme
-syntax enable
-set background=dark
-let g:solarized_termcolors=256
-colorscheme solarized
-
-inoremap <C-g> <Esc>
