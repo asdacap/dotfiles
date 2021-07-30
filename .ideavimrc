@@ -68,7 +68,6 @@ imap <c-k> <c-o>d$
 nmap <c-x><c-f> :action GotoFile<CR>
 nmap <c-x>b :action Switcher<CR>
 nmap <m-x> :action GotoAction<CR>
-nmap <c-r> :action Run<cr>
 nmap <c-c> <c-x> :action Run<cr>
 nmap <c-m-s> :action FindUsages<cr>
 nmap <m-down> :action MethodDown<cr>
