@@ -27,6 +27,9 @@ nmap <leader>ns :action GotoSymbol<cr>
 nmap <leader>nm :action FileStructurePopup<cr>
 nmap <leader>d :action ShowErrorDescription<cr>
 
+nmap g] :action GotoImplementation<CR>
+nmap g[ :action FindUsages<CR>
+
 map sh <Plug>(easymotion-bd-wl)
 map sl <Plug>(easymotion-bd-wl)
 map sj <Plug>(easymotion-j)
