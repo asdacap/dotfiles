@@ -10,12 +10,13 @@ let
       web3
       setuptools
   ];
+  user-config = import ./user.nix;
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "amirul";
-  home.homeDirectory = "/home/amirul";
+  home.username = user-config.username;
+  home.homeDirectory = user-config.homeDirectory;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -30,49 +31,25 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    # Adds the 'hello' command to your environment. It prints a friendly
+    # "Hello, world!" when run.
+    pkgs.hello
 
     fio
     slack
-    google-chrome
     jetbrains.idea-ultimate
     jetbrains.pycharm-professional
-    dotnet-sdk_7
     jetbrains.rider
-    rocksdb
+    dotnet-sdk_7
     xclip
-    nodejs
-    solc
-    cmake
-    clang
-    gnumake
-    croaring
-    transmission-gtk
 
     #(steam.override { extraPkgs = pkgs: [ openssl_1_1 ]; }).run
-    steam-run
+    #steam-run
 
     (python3.withPackages pythonPackages)
 
     nix-index
-    delve
     tmux
-    appimage-run
     aria
     jq
   ];
@@ -144,5 +121,6 @@ in
 
   nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1v" ];
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnsupportedSystem = true;
 }
 
