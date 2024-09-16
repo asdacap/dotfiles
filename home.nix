@@ -37,11 +37,12 @@ in
 
     fio
     slack
-    jetbrains.idea-ultimate
-    jetbrains.pycharm-professional
-    jetbrains.rider
+    #jetbrains.idea-ultimate
+    #jetbrains.pycharm-professional
+    #jetbrains.rider
     dotnet-sdk_7
     xclip
+    qmk
 
     #(steam.override { extraPkgs = pkgs: [ openssl_1_1 ]; }).run
     #steam-run

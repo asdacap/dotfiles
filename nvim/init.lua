@@ -62,6 +62,9 @@ vim.opt.guicursor = "a:blinkon10"
 vim.keymap.set('n', '<c-x><c-f>', ':Files<CR>')
 vim.keymap.set('n', '<c-x>b', ':Buffers<CR>')
 
+vim.keymap.set('n', '<leader>xf', ':Files<CR>')
+vim.keymap.set('n', '<leader>b', ':Buffers<CR>')
+
 -- Some emacs stuff that I got used to
 vim.keymap.set('n', '<c-a>', 'I')
 vim.keymap.set('n', '<c-e>', 'A')
@@ -73,6 +76,9 @@ vim.keymap.set('i', '<m-d>', '<c-o>dw')
 vim.keymap.set('n', '<c-k>', 'd$')
 vim.keymap.set('i', '<c-k>', '<c-o>d$')
 
+-- Custom window navigation
+vim.keymap.set('n', '<leader>w', '<c-w><c-w>')
+
 -- LSP config
 local lsp_zero = require('lsp-zero')
 
@@ -82,6 +88,7 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 
   vim.keymap.set('n', '<m-space>', vim.lsp.buf.code_action)
+  vim.keymap.set('n', '<m-cr>', vim.lsp.buf.code_action)
 end)
 
 local lspconfig = require('lspconfig')
@@ -100,7 +107,9 @@ local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
   mapping = cmp.mapping.preset.insert({
-    ['<Tab>'] = cmp_action.tab_complete(),
+    ['<CR>'] = cmp.mapping.confirm({select = true}),
+    ['<Tab>'] = cmp.mapping.confirm({select = false}),
+    -- ['<Tab>'] = cmp_action.tab_complete(),
     ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
   }),
 })
