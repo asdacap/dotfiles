@@ -19,5 +19,6 @@ mkdir -p $HOME/.config/
 [ ! -d "$HOME/.config/nvim" ] && ln -s "$PWD/nvim" "$HOME/.config/nvim"
 
 mkdir -p $HOME/.config/home-manager/
-[ ! -d "$HOME/.config/home-manager/home.nix" ] && ln -s "$PWD/home.nix" "$HOME/.config/home-manager/home.nix"
+[ ! -d "$HOME/.config/home-manager/home.nix" ] && ln -s "$PWD/nixos/home.nix" "$HOME/.config/home-manager/home.nix"
+[ ! -d "$HOME/.config/home-manager/user.nix" ] && ln -s "$PWD/nixos/user.nix" "$HOME/.config/home-manager/user.nix"
 

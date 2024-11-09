@@ -17,6 +17,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'vim-syntastic/syntastic'
 Plug 'rust-lang/rust.vim'
 Plug 'cappyzawa/starlark.vim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
 
 " LSP Support
 Plug 'neovim/nvim-lspconfig'
@@ -24,6 +25,13 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'L3MON4D3/LuaSnip'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'nvim-neotest/neotest'
+Plug 'nvim-neotest/neotest-go'
 
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}
 call plug#end()
@@ -78,6 +86,7 @@ vim.keymap.set('i', '<c-k>', '<c-o>d$')
 
 -- Custom window navigation
 vim.keymap.set('n', '<leader>w', '<c-w><c-w>')
+vim.keymap.set('n', '<leader>cc', ':e ~/.config/nvim/init.lua<cr>')
 
 -- LSP config
 local lsp_zero = require('lsp-zero')
@@ -89,17 +98,59 @@ lsp_zero.on_attach(function(client, bufnr)
 
   vim.keymap.set('n', '<m-space>', vim.lsp.buf.code_action)
   vim.keymap.set('n', '<m-cr>', vim.lsp.buf.code_action)
+  vim.keymap.set('n', '<leader>r', vim.lsp.codelens.run)
+
+
+  -- Enable codelens refresh
+  if client.server_capabilities.codeLensProvider then
+      vim.api.nvim_create_autocmd({"BufEnter", "InsertLeave"}, {
+          buffer = bufnr,
+          callback = vim.lsp.codelens.refresh,
+      })
+      vim.lsp.codelens.refresh()
+  end
 end)
 
 local lspconfig = require('lspconfig')
 lspconfig.pyright.setup {}
 lspconfig.tsserver.setup {}
+lspconfig.gopls.setup {
+   settings = {
+        gopls = {
+            codelenses = {
+                generate = true,  -- Enable code lens for `go generate`
+                gc_details = true,  -- Enable code lens for garbage collection optimization details
+                regenerate_cgo = true,  -- Enable code lens for `go mod tidy` to update dependencies
+                test = true,  -- Enable code lens for testing features (including running tests)
+                tidy = true,  -- Enable code lens for `go mod tidy`
+            },
+        },
+    },
+}
 lspconfig.rust_analyzer.setup {
   -- Server-specific settings. See `:help lspconfig-setup`
   settings = {
     ['rust-analyzer'] = {},
   },
 }
+
+-- Telesdorep
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+
+require("neotest").setup({
+  adapters = {
+    require("neotest-go")({
+      experimental = {
+        test_table = false,
+      },
+      args = { "-count=1", "-timeout=60s" }
+    })
+  }
+})
 
 
 local cmp = require('cmp')

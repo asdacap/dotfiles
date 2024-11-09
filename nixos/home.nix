@@ -6,6 +6,7 @@ let
       ipython
       pylint
       pandas
+      requests
       matplotlib
       web3
       setuptools
@@ -37,7 +38,7 @@ in
 
     fio
     slack
-    #jetbrains.idea-ultimate
+    jetbrains.idea-ultimate
     #jetbrains.pycharm-professional
     #jetbrains.rider
     dotnet-sdk_7
@@ -52,7 +53,18 @@ in
     nix-index
     tmux
     aria
+    ripgrep
     jq
+    wl-clipboard
+
+    (neovim-unwrapped.overrideAttrs (old: {
+      src = fetchFromGitHub {
+        owner = "neovim";
+        repo = "neovim";
+        rev = "7e194f0d0c33a0a1b7ccfaf2baafdacf7f22fbb5";
+        hash = "sha256-OsHIacgorYnB/dPbzl1b6rYUzQdhTtsJYLsFLJxregk=";
+      };
+    }))
   ];
 
 
@@ -111,14 +123,11 @@ in
     };
   };
 
-  programs.neovim = {
-    enable = true;
-  };
 
-  programs.go = {
-    enable = true;
-    goPath = "go";
-  };
+  #programs.go = {
+    #enable = true;
+    #goPath = "go";
+  #};
 
   nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1v" ];
   nixpkgs.config.allowUnfree = true;

@@ -65,8 +65,8 @@ imap <m-d> <c-o>dw
 nmap <c-k> d$
 imap <c-k> <c-o>d$
 
-nmap <leader>xf :action GotoFile<CR>
-nmap <leader>b :action Switcher<CR>
+nmap <leader>ff :action GotoFile<CR>
+nmap <leader>fb :action Switcher<CR>
 
 " bindings follows emacs binding
 nmap <c-x><c-f> :action GotoFile<CR>
